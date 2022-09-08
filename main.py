@@ -1,7 +1,7 @@
 import telebot
 from telebot import types
 
-token = ''
+token = '5392029038:AAFBhcftWuZxyjU6E6waIEID6rdm91DY9fI'
 bot = telebot.TeleBot(token)
 
 tasks = dict()
