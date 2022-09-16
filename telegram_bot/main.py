@@ -6,7 +6,7 @@ import schedule
 
 
 def set_token():    # выводит токен
-    file_token = 'token.txt'
+    file_token = '../token.txt'
     with open(file_token, 'r') as file:  # считывает токен из файла и закрывает его
         return file.readline()
 
