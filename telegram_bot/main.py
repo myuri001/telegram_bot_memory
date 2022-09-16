@@ -1,8 +1,7 @@
 import telebot
-from datetime import date, datetime
+from datetime import date
 from telebot import types
-import time
-import schedule
+
 
 
 def set_token():    # выводит токен
@@ -41,9 +40,11 @@ def get_keyboard():    # функция кнопки при вводе start
 def add_in_dct1(text):  # добавляет введеный пользователем текст в список
     dct1.append(text)
 
+
 def get_in_dct1():
     for i in dct1:
         return i
+
 
 @bot.message_handler(commands=['запомнить'])
 def get_text_messages(message):    # Заносит в список и подтверждает занесение
