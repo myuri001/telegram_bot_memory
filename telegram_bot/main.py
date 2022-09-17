@@ -1,16 +1,14 @@
 import telebot
 from datetime import date
 from telebot import types
+from envparse import Env
+
+env = Env()
+TOKEN = env.str("TOKEN")
+ADMIN_CHAT_ID = env.int("ADMIN_CHAT_ID")
 
 
-
-def set_token():    # выводит токен
-    file_token = '../token.txt'
-    with open(file_token, 'r') as file:  # считывает токен из файла и закрывает его
-        return file.readline()
-
-
-bot = telebot.TeleBot(set_token())
+bot = telebot.TeleBot(token=TOKEN)
 
 @bot.message_handler(commands=['start'])
 def start(message):    # Выводит клавиатуру с кнопками
@@ -21,6 +19,7 @@ def start(message):    # Выводит клавиатуру с кнопками
     btn4 = types.KeyboardButton("/запомнить")
     markup.add(btn1, btn2, btn3, btn4)
     bot.send_message(message.chat.id, text="Привет, {0.first_name}!\n Вспоминаем или запоминаем?".format(message.from_user), reply_markup=markup)
+
 
 @bot.message_handler(commands=['словарь_1'])
 def question_dct1(message):  # при вводе словарь 1 выводит 'Привет', с кнопкой
