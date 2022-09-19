@@ -38,6 +38,15 @@ def question_dct2(message):
         bot.send_message(message.chat.id, f' Помнишь {text_dct2}?', reply_markup=get_keyboard2())
 
 
+@bot.message_handler(commands=['словарь_3'])
+def question_dct3(message):
+    text_dct3 = get_in_dct3()
+    if text_dct3 is None:
+        bot.send_message(message.chat.id, f'Словарь 3 пуст')
+    else:
+        bot.send_message(message.chat.id, f' Помнишь {text_dct3}?', reply_markup=get_keyboard3())
+
+
 def get_keyboard():    # функция кнопки при вводе start
     keyboard = telebot.types.InlineKeyboardMarkup()
     button_yes = telebot.types.InlineKeyboardButton('Yes', callback_data='Yes')
@@ -54,6 +63,14 @@ def get_keyboard2():    # функция кнопки при вводе start
     return keyboard
 
 
+def get_keyboard3():    # функция кнопки при вводе start
+    keyboard = telebot.types.InlineKeyboardMarkup()
+    button_yes = telebot.types.InlineKeyboardButton('Yes', callback_data='Yes3')
+    button_no = telebot.types.InlineKeyboardButton('No', callback_data='No3')
+    keyboard.add(button_yes, button_no)
+    return keyboard
+
+
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
     if call.data == "Yes":
@@ -62,7 +79,7 @@ def callback(call):
         delete_dct1()
     elif call.data == "No":
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Вернул в словарь 1")
-        add_in_dct1(dct1[0])
+        add_dct1(dct1[0])
         delete_dct1()
 
     elif call.data == "Yes2":
@@ -71,27 +88,42 @@ def callback(call):
         delete_dct2()
     elif call.data == "No2":
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Вернул в словарь 1")
-        add_in_dct1(dct2[0])
+        add_dct1(dct2[0])
         delete_dct2()
 
+    elif call.data == "Yes3":
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Добавил в конец словаря 3")
+        add_dct33()
+        delete_dct3()
+
+    elif call.data == "No3":
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Вернул в словарь 1")
+        add_dct1(dct3[0])
+        delete_dct3()
 
 def delete_dct1():
     del dct1[0]
 
 
-def add_dct2():
-    dct2.append(dct1[0])
-
 def delete_dct2():
     del dct2[0]
-    dct1.append(dct2[0])
+
+
+def delete_dct3():
+    del dct3[0]
+
+
+def add_dct2():
+    dct2.append(dct1[0])
 
 
 def add_dct3():
     dct3.append(dct2[0])
 
+def add_dct33():
+    dct3.append(dct3[0])
 
-def add_in_dct1(text):  # добавляет введеный пользователем текст в список
+def add_dct1(text):
     dct1.append(text)
 
 
@@ -105,9 +137,14 @@ def get_in_dct2():
         return i
 
 
+def get_in_dct3():
+    for i in dct3:
+        return i
+
+
 @bot.message_handler(commands=['запомнить'])
 def get_text_messages(message):    # Заносит в список и подтверждает занесение
-    add_in_dct1(message.text)
+    add_dct1(message.text)
     bot.send_message(message.chat.id,
                      f"принял {message.text} и добавл на дату {now}")
 
