@@ -10,6 +10,7 @@ ADMIN_CHAT_ID = env.int("ADMIN_CHAT_ID")
 
 bot = telebot.TeleBot(token=TOKEN)
 
+# Проверка бота на включенное состояние
 @bot.message_handler(commands=['start'])
 def start(message):    # Выводит клавиатуру с кнопками
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -20,7 +21,7 @@ def start(message):    # Выводит клавиатуру с кнопками
     markup.add(btn1, btn2, btn3, btn4)
     bot.send_message(message.chat.id, text="Привет, {0.first_name}!\n Я готов?".format(message.from_user), reply_markup=markup)
 
-
+# Показывают элемент и спрашивают помню или нет
 @bot.message_handler(commands=['словарь_1'])
 def question_dct1(message):
     text_dct1 = get_in_dct1()
@@ -28,6 +29,7 @@ def question_dct1(message):
         bot.send_message(message.chat.id, f' Словарь 1 пуст')
     else:
         bot.send_message(message.chat.id, f' Помнишь {text_dct1}?', reply_markup=get_keyboard())
+
 
 @bot.message_handler(commands=['словарь_2'])
 def question_dct2(message):
@@ -46,8 +48,8 @@ def question_dct3(message):
     else:
         bot.send_message(message.chat.id, f' Помнишь {text_dct3}?', reply_markup=get_keyboard3())
 
-
-def get_keyboard():    # функция кнопки при вводе start
+# Функции пнопок, действие при нажатии на Yes или No
+def get_keyboard():
     keyboard = telebot.types.InlineKeyboardMarkup()
     button_yes = telebot.types.InlineKeyboardButton('Yes', callback_data='Yes')
     button_no = telebot.types.InlineKeyboardButton('No', callback_data='No')
@@ -55,7 +57,7 @@ def get_keyboard():    # функция кнопки при вводе start
     return keyboard
 
 
-def get_keyboard2():    # функция кнопки при вводе start
+def get_keyboard2():
     keyboard = telebot.types.InlineKeyboardMarkup()
     button_yes = telebot.types.InlineKeyboardButton('Yes', callback_data='Yes2')
     button_no = telebot.types.InlineKeyboardButton('No', callback_data='No2')
@@ -63,7 +65,7 @@ def get_keyboard2():    # функция кнопки при вводе start
     return keyboard
 
 
-def get_keyboard3():    # функция кнопки при вводе start
+def get_keyboard3():
     keyboard = telebot.types.InlineKeyboardMarkup()
     button_yes = telebot.types.InlineKeyboardButton('Yes', callback_data='Yes3')
     button_no = telebot.types.InlineKeyboardButton('No', callback_data='No3')
@@ -101,6 +103,7 @@ def callback(call):
         add_dct1(dct3[0])
         delete_dct3()
 
+# Удаляют элементы в списки
 def delete_dct1():
     del dct1[0]
 
@@ -111,6 +114,10 @@ def delete_dct2():
 
 def delete_dct3():
     del dct3[0]
+
+# Добавляют элементы в списки
+def add_dct1(text):
+    dct1.append(text)
 
 
 def add_dct2():
@@ -123,10 +130,9 @@ def add_dct3():
 def add_dct33():
     dct3.append(dct3[0])
 
-def add_dct1(text):
-    dct1.append(text)
 
 
+# вытягивают из списков элекменты
 def get_in_dct1():
     for i in dct1:
         return i
