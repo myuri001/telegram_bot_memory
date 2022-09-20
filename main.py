@@ -48,11 +48,15 @@ def question_dct3(message):
     else:
         bot.send_message(message.chat.id, f' Помнишь {text_dct3}?', reply_markup=get_keyboard3())
 
-# Функции кнопок, действие при нажатии на Yes или No
+# Выводит кнопки Yes и No
 def get_keyboard():
+    button_command_yes = 'button_command_yes_dct1'
+    button_command_no = 'button_command_no_dct1'
+    button_name_yes = 'Yes'
+    button_name_no = 'No'
     keyboard = telebot.types.InlineKeyboardMarkup()
-    button_yes = telebot.types.InlineKeyboardButton('Yes', callback_data='Yes')
-    button_no = telebot.types.InlineKeyboardButton('No', callback_data='No')
+    button_yes = telebot.types.InlineKeyboardButton(button_name_yes, callback_data=button_command_yes)
+    button_no = telebot.types.InlineKeyboardButton(button_name_no, callback_data=button_command_no )
     keyboard.add(button_yes, button_no)
     return keyboard
 
@@ -78,11 +82,11 @@ def callback(call):
     # Реагирует на кнопки.
     # Если Yes, то добавляет элемент в список выше.
     # Если No, то возвращает в список 1 и удаляет из текущего списка
-    if call.data == "Yes":
+    if call.data == "button_command_yes_dct1":
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Убрал в словарь 2")
         add_dct2()
         delete_dct1()
-    elif call.data == "No":
+    elif call.data == "button_command_no_dct1":
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Вернул в словарь 1")
         add_dct1(dct1[0])
         delete_dct1()
@@ -106,7 +110,7 @@ def callback(call):
         add_dct1(dct3[0])
         delete_dct3()
 
- # Удаляют элементы из списков
+# Удаляют элементы из списков
 def delete_dct1():
     # Удаляют элементы из списка 1
     del dct1[0]
