@@ -21,7 +21,7 @@ def start(message):    # Выводит клавиатуру с кнопками
     markup.add(btn1, btn2, btn3, btn4)
     bot.send_message(message.chat.id, text="Привет, {0.first_name}!\n Я готов?".format(message.from_user), reply_markup=markup)
 
-# Показывают элемент и спрашивают помню или нет
+# Показывает элемент и спрашивает помню или нет
 @bot.message_handler(commands=['словарь_1'])
 def question_dct1(message):
     text_dct1 = get_in_dct1()
@@ -48,7 +48,7 @@ def question_dct3(message):
     else:
         bot.send_message(message.chat.id, f' Помнишь {text_dct3}?', reply_markup=get_keyboard3())
 
-# Функции пнопок, действие при нажатии на Yes или No
+# Функции кнопок, действие при нажатии на Yes или No
 def get_keyboard():
     keyboard = telebot.types.InlineKeyboardMarkup()
     button_yes = telebot.types.InlineKeyboardButton('Yes', callback_data='Yes')
@@ -75,6 +75,9 @@ def get_keyboard3():
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
+    # Реагирует на кнопки.
+    # Если Yes, то добавляет элемент в список выше.
+    # Если No, то возвращает в список 1 и удаляет из текущего списка
     if call.data == "Yes":
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Убрал в словарь 2")
         add_dct2()
@@ -103,36 +106,42 @@ def callback(call):
         add_dct1(dct3[0])
         delete_dct3()
 
-# Удаляют элементы в списки
+ # Удаляют элементы из списков
 def delete_dct1():
+    # Удаляют элементы из списка 1
     del dct1[0]
 
 
 def delete_dct2():
+    # Удаляют элементы из списка 2
     del dct2[0]
 
 
 def delete_dct3():
+    # Удаляют элементы из списка 3
     del dct3[0]
 
-# Добавляют элементы в списки
+# Добавляет элементы в списки
 def add_dct1(text):
+    # Добавляет элементы в список 1
     dct1.append(text)
 
 
 def add_dct2():
+    # Добавляет элементы из списка 2 в конец списка 1
     dct2.append(dct1[0])
 
 
 def add_dct3():
+    # Добавляет элементы из списка 2 в конец списка 3
     dct3.append(dct2[0])
 
+
 def add_dct33():
+    # Добавляет элементы из списка 3 в конец списка 3
     dct3.append(dct3[0])
 
-
-
-# вытягивают из списков элекменты
+# вытягивают из списков элементы
 def get_in_dct1():
     for i in dct1:
         return i
@@ -147,14 +156,11 @@ def get_in_dct3():
     for i in dct3:
         return i
 
-
+# Добавляет введеное с клавиатуры слово в список 1 и выводит подтверждение
 @bot.message_handler(commands=['запомнить'])
 def get_text_messages(message):    # Заносит в список и подтверждает занесение
     add_dct1(message.text)
-    bot.send_message(message.chat.id,
-                     f"принял {message.text} и добавл на дату {now}")
-
-    print(dct1)
+    bot.send_message(message.chat.id, f"принял {message.text} и добавл на дату {now}")
 
 
 if __name__ == '__main__':
